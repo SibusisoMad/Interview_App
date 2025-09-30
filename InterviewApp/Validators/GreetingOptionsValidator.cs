@@ -17,11 +17,6 @@ namespace InterviewApp.Validators
             if (string.IsNullOrWhiteSpace(options.Language))
                 errors.Add("Greeting:Language must not be null or empty.");
 
-            if (options.Translations is null || options.Translations.Count == 0)
-                errors.Add("Greeting:Translations must not be empty.");
-            else if (!options.Translations.ContainsKey("English"))
-                errors.Add("Greeting:Translations must contain an 'English' fallback.");
-
             if (options.Messages is null || options.Messages.Count == 0)
                 errors.Add("Greeting:Messages must not be empty.");
             else

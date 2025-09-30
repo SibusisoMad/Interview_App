@@ -10,11 +10,13 @@ namespace InterviewApp.Services
     {
         private readonly GreetingOptions _options;
         private readonly ILogger<GreetingService> _logger;
+        private readonly ITimeGreetingService _timeGreetingService;
 
-        public GreetingService(IOptions<GreetingOptions> options, ILogger<GreetingService> logger)
+        public GreetingService(IOptions<GreetingOptions> options, ILogger<GreetingService> logger, ITimeGreetingService timeGreetingService)
         {
             _options = options.Value;
             _logger = logger;
+            _timeGreetingService = timeGreetingService;
         }
 
         public string GetGreetingMessage()
@@ -36,9 +38,9 @@ namespace InterviewApp.Services
                 ? _options.Messages[language]
                 : _options.Messages.GetValueOrDefault("English", "Welcome to the interview app!");
 
-            var greetingMsg = $"{greeting}! {message}";
+            var timeGreetingMsg = _timeGreetingService.GetTimeGreeting();
 
-            return greetingMsg;
+            return $"{timeGreetingMsg}! {message}"; 
         }
     }
 }

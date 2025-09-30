@@ -21,6 +21,7 @@ class Program
                   services.Configure<GreetingOptions>(context.Configuration.GetSection("Greeting"));
                   services.AddSingleton<IValidateOptions<GreetingOptions>, GreetingOptionsValidator>();
                   services.AddTransient<IGreetingService, GreetingService>();
+                  services.AddSingleton<ITimeGreetingService, TimeGreetingService>();
               })
             .Build();
 
