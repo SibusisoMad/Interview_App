@@ -1,8 +1,10 @@
 ﻿using InterviewApp.Models;
 using InterviewApp.Services;
+using InterviewApp.Validators;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
 
@@ -17,15 +19,28 @@ class Program
             })
               .ConfigureServices((context, services) => {
                   services.Configure<GreetingOptions>(context.Configuration.GetSection("Greeting"));
+                  services.AddSingleton<IValidateOptions<GreetingOptions>, GreetingOptionsValidator>();
                   services.AddTransient<IGreetingService, GreetingService>();
               })
             .Build();
 
-        var greetingService = host.Services.GetRequiredService<IGreetingService>();
-        var message = greetingService.GetGreetingMessage();
-
-        Console.WriteLine(message);
+        try
+        {
+            var greetingService = host.Services.GetRequiredService<IGreetingService>();
+            var message = greetingService.GetGreetingMessage();
+            Console.WriteLine(message);
+        }
+        catch (OptionsValidationException ex)
+        {
+            Console.WriteLine("Configuration validation failed:");
+            foreach (var failure in ex.Failures)
+            {
+                Console.WriteLine($" - {failure}");
+            }
+            Environment.Exit(1);
+        }
 
         await host.RunAsync();
     }
+
 }
