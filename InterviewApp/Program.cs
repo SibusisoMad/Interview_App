@@ -3,6 +3,7 @@ using InterviewApp.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.Threading.Tasks;
 
 class Program
@@ -21,7 +22,9 @@ class Program
             .Build();
 
         var greetingService = host.Services.GetRequiredService<IGreetingService>();
-        greetingService.Run();
+        var message = greetingService.GetGreetingMessage();
+
+        Console.WriteLine(message);
 
         await host.RunAsync();
     }
