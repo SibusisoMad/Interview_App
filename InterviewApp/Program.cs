@@ -1,11 +1,14 @@
-﻿using InterviewApp.Models;
+﻿using InterviewApp.MediatRIntegration;
+using InterviewApp.Models;
 using InterviewApp.Services;
 using InterviewApp.Validators;
+using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using System;
+using System.Reflection;
 using System.Threading.Tasks;
 
 class Program
@@ -22,14 +25,19 @@ class Program
                   services.AddSingleton<IValidateOptions<GreetingOptions>, GreetingOptionsValidator>();
                   services.AddTransient<IGreetingService, GreetingService>();
                   services.AddSingleton<ITimeGreetingService, TimeGreetingService>();
+
+                  services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
               })
             .Build();
 
         try
         {
-            var greetingService = host.Services.GetRequiredService<IGreetingService>();
-            var message = greetingService.GetGreetingMessage();
-            Console.WriteLine(message);
+            var mediator = host.Services.GetRequiredService<IMediator>();
+
+            var timeGreeting = await mediator.Send(new GetTimeGreetingQuery());
+            var userGreeting = await mediator.Send(new GreetUserCommand());
+
+            Console.WriteLine($"{timeGreeting}! {userGreeting}");
         }
         catch (OptionsValidationException ex)
         {
