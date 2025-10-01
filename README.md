@@ -8,7 +8,7 @@ InterviewApp is a .NET Core console application dynamically greeting users based
 **Project setup:**
 run gitbash commands:
 
-git clone
+git clone https://github.com/SibusisoMad/Interview_App.git
 
 Cd InterviewApp
 
