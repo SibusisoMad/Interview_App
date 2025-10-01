@@ -5,10 +5,15 @@ InterviewApp is a .NET Core console application dynamically greeting users based
 
 **Project setup:**
 run gitbash commands:
+
 git clone
+
 Cd InterviewApp
+
 Restore Dependencies: dotnet restore
+
 Build Project: dotnet build
+
 Run the Application: dotnet run
 
 Altenative: after clonining  navigate to project directory solution "InterviewApp.sln" open with visual studio and build solution and run the InterviewApp.
